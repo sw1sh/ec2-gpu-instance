@@ -1,7 +1,10 @@
 
-anaconda_installer: https://repo.continuum.io/archive/Anaconda2-4.0.0-Linux-x86_64.sh
+anaconda_installer: https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
+anaconda_path: /volume/anaconda2/
 
+caffe_path: /volume/caffe/
 caffe_dependencies:
+- libatlas-base-dev
 - libopenblas-dev
 - libprotobuf-dev
 - libleveldb-dev

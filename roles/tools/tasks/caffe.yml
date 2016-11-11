@@ -10,15 +10,15 @@
 
 - name: Wait for server to restart
   local_action:
-    module: wait_for host={{ inventory_hostname }} delay=30 timeout=120 state=started
+    module: wait_for host={{ inventory_hostname }} port=22 delay=30 timeout=120 connect_timeout=15 state=started
   become: false
 
 - name: Cloning caffe git repo
-  git: repo=https://github.com/BVLC/caffe.git dest=~/caffe
+  git: repo=https://github.com/BVLC/caffe.git dest={{ caffe_path }}
   become: false
 
 - name: Install python dependencies
-  shell: ~/anaconda2/bin/pip install {{ item }}
+  shell: "{{ anaconda_path }}/bin/pip install {{ item }}"
   with_items:
     - leveldb
     - protobuf
@@ -26,11 +26,11 @@
   become: false
 
 - name: Copy Makefile.config file to instance
-  copy: src=Makefile.config dest=~/caffe/Makefile.config
+  copy: src=Makefile.config dest={{ caffe_path }}/Makefile.config
   become: false
 
 - name: Add caffe to the PATH
-  lineinfile: dest=~/.bashrc line="export CAFFE_ROOT=~/caffe"
+  lineinfile: dest=~/.bashrc line="export CAFFE_ROOT={{ caffe_path }}"
   become: false
 
 - name: Link libhdf5
@@ -48,31 +48,31 @@
 - name: Build caffe all
   command: make all -j8
   args:
-    chdir: ~/caffe
+    chdir: "{{ caffe_path }}"
   become: false
 
 - name: Build caffe pycaffe
   command: make pycaffe
   args:
-    chdir: ~/caffe
+    chdir: "{{ caffe_path }}"
   become: false
 
 - name: Build caffe distribute
   command: make distribute
   args:
-    chdir: ~/caffe
+    chdir: "{{ caffe_path }}"
   become: false
 
 - name: Add pycaffe distribution to the PYTHONPATH
-  lineinfile: dest=~/.bashrc line="export PYTHONPATH=~/caffe/distribute/python:$PYTHONPATH"
+  lineinfile: dest=~/.bashrc line="export PYTHONPATH={{ caffe_path }}/distribute/python:$PYTHONPATH"
   become: false
 
 - name: Add caffe binaries to PATH
-  lineinfile: dest=~/.bashrc line="export PATH=~/caffe/build/tools:$PATH"
+  lineinfile: dest=~/.bashrc line="export PATH={{ caffe_path }}/build/tools:$PATH"
   become: false
 
 - name: Add lib to LD_LIBRARY_PATH
-  lineinfile: dest=~/.bashrc line="export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/caffe/build/lib:~/anaconda2/lib"
+  lineinfile: dest=~/.bashrc line="export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:{{ caffe_path }}/build/lib:{{ anaconda_path }}/lib"
   become: false
 
 - name: Restart server
