@@ -1,0 +1,12 @@
+---
+
+- name: Clone dlib
+  git: repo=https://github.com/davisking/dlib dest={{ dlib_path }}
+  become: false
+
+- name: Build dlib
+  shell: "cd {{ dlib_path }} ; mkdir build; cd build; cmake .. ; cmake --build ."
+  become: false
+
+- name: Install python lib
+  shell: "cd {{ dlib_path }} ; {{ anaconda_path }}/bin/python setup.py install"

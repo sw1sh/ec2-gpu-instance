@@ -3,4 +3,6 @@
  - { include: theano.yml, tags: theano}
  - { include: keras.yml, tags: keras }
  - { include: caffe.yml, tags: caffe }
- - { include: notebook.yml, tags: notebook } - { include: tensorflow.yml, tags: tensorflow }
+ - { include: notebook.yml, tags: notebook }
+ - { include: tensorflow.yml, tags: tensorflow }
+ - { include: dlib.yml, tags: dlib }

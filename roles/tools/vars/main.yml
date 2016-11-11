@@ -16,3 +16,5 @@ caffe_dependencies:
 - libgoogle-glog-dev
 - liblmdb-dev
 - protobuf-compiler
+
+dlib_path: /volume/dlib/
