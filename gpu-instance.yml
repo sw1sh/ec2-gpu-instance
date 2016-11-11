@@ -6,3 +6,4 @@
     - { role: common, tags: common }
     - { role: gpu, tags: gpu }
     - { role: tools, tags: tools }
+    - { role: docker, tags: docker }

@@ -1,0 +1,24 @@
+---
+
+- name: Install prerequisites
+  apt: name="{{item}}" state=installed
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Add key
+  shell: apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Add repo
+  template: src=docker.repo.j2 dest=/etc/apt/sources.list.d/docker.list
+
+- name: Install docker-engine and pip
+  apt: name="{{item}}" state=installed update_cache=yes
+  with_items:
+    - docker-engine
+
+- name: Start/enable docker service
+  service: name=docker enabled=yes state=restarted
+
+- name: Create docker user
+  user: name=docker group=docker uid=991
